@@ -1,5 +1,9 @@
 # DEQAR API Client(s)
 
+![Maintenance Status](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+![CI Status](https://github.com/it-bens/deqar-api-client/actions/workflows/ci.yaml/badge.svg?branch=master)
+[![codecov](https://codecov.io/gh/it-bens/deqar-api-client/branch/master/graph/badge.svg?token=B39XLZT3DL)](https://codecov.io/gh/it-bens/deqar-api-client)
+
 ## What is DEQAR?
 DEQAR is the database of EQAR, the European Quality Assurance Register for Higher Education.
 It provides information about european institutions for higher education, the quality assurance agencies,
