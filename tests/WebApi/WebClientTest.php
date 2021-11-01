@@ -22,10 +22,40 @@ final class WebClientTest extends TestCase
         $this->webApiClient = WebApiClient::create($_ENV['DEQAR_API_USERNAME'], $_ENV['DEQAR_API_PASSWORD']);
     }
 
+    public function testGetActivities(): void
+    {
+        $activites = $this->webApiClient->getActivities();
+        $this->assertContainsOnlyInstancesOf(SimpleAgency\Activity::class, $activites);
+    }
+
+    public function testGetActivity(): void
+    {
+        $activity = $this->webApiClient->getActivity('154');
+        self::assertInstanceOf(SimpleAgency\Activity::class, $activity);
+    }
+
+    public function testGetActivityInvalid(): void
+    {
+        $activity = $this->webApiClient->getActivity('0');
+        self::assertNull($activity);
+    }
+
     public function testGetAgencies(): void
     {
         $agencies = $this->webApiClient->getAgencies();
         $this->assertContainsOnlyInstancesOf(SimpleAgency::class, $agencies);
+    }
+
+    public function testGetAgencySimple(): void
+    {
+        $agency = $this->webApiClient->getAgencySimple('5');
+        self::assertInstanceOf(SimpleAgency::class, $agency);
+    }
+
+    public function testGetAgencySimpleInvalid(): void
+    {
+        $agency = $this->webApiClient->getAgencySimple('0');
+        self::assertNull($agency);
     }
 
     public function testGetCountries(): void
@@ -34,15 +64,27 @@ final class WebClientTest extends TestCase
         $this->assertContainsOnlyInstancesOf(SimpleCountry::class, $countries);
     }
 
-    public function testGetInstitution(): void
+    public function testGetInstitutionDetailed(): void
     {
-        $institution = $this->webApiClient->getInstitution('2191');
+        $institution = $this->webApiClient->getInstitutionDetailed('2191');
         $this->assertInstanceOf(DetailedInstitution::class, $institution);
     }
 
-    public function testGetInstitutionInvalid(): void
+    public function testGetInstitutionDetailedInvalid(): void
     {
-        $institution = $this->webApiClient->getInstitution('0');
+        $institution = $this->webApiClient->getInstitutionDetailed('0');
+        $this->assertNull($institution);
+    }
+
+    public function testGetInstitutionSimple(): void
+    {
+        $institution = $this->webApiClient->getInstitutionSimple('2191');
+        $this->assertInstanceOf(SimpleInstitution::class, $institution);
+    }
+
+    public function testGetInstitutionSimpleInvalid(): void
+    {
+        $institution = $this->webApiClient->getInstitutionSimple('0');
         $this->assertNull($institution);
     }
 
