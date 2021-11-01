@@ -41,14 +41,14 @@ trait ValidatorTrait
 final class ValidatorContainer implements ContainerInterface
 {
 
-    /** @var <string, ConstraintValidatorInterface> */
+    /** @var array<string, ConstraintValidatorInterface> $services */
     private array $services = [];
 
     public function __construct()
     {
     }
 
-    public function add(object $service): void
+    public function add(ConstraintValidatorInterface $service): void
     {
         $this->services[get_class($service)] = $service;
     }

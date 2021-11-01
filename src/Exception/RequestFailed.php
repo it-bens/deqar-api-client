@@ -14,6 +14,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class RequestFailed extends RuntimeException
 {
+    /** @phpstan-ignore-next-line */
     private ?array $responseContent;
 
     private function __construct(string $message, private ?int $statusCode = null, ?ExceptionInterface $previousException = null, string $responseContent = null)
@@ -40,12 +41,12 @@ final class RequestFailed extends RuntimeException
         return new self(sprintf('The request to the URI "%s" returned "Unauthorized (401)" as a response.', $uri), 401, $previousException);
     }
 
-    public static function withClientException(string $uri, ?ClientExceptionInterface $previousException = null, ?string $responseContent = null): self
+    public static function withClientException(string $uri, ClientExceptionInterface $previousException, ?string $responseContent = null): self
     {
         return new self(sprintf('The request to the URI "%s" returned a client error (%d) as a response.', $uri, $previousException->getCode()), $previousException->getCode(), $previousException, $responseContent);
     }
 
-    public static function withRedirectionException(string $uri, ?RedirectionExceptionInterface $previousException = null, ?string $responseContent = null): self
+    public static function withRedirectionException(string $uri, RedirectionExceptionInterface $previousException, ?string $responseContent = null): self
     {
         return new self(sprintf('The request to the URI "%s" returned a redirection error (%d) as a response.', $uri, $previousException->getCode()), $previousException->getCode(), $previousException, $responseContent);
     }
@@ -65,6 +66,10 @@ final class RequestFailed extends RuntimeException
         return new self(sprintf('The request to the URI "%s" returned with status code %s, but the expected status code was %s.', $uri, $statusCode, $expectedStatusCode), $statusCode, responseContent: $responseContent);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     * @return array|null
+     */
     public function getResponseContent(): ?array
     {
         return $this->responseContent;

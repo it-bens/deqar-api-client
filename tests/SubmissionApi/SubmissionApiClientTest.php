@@ -21,6 +21,9 @@ final class SubmissionApiClientTest extends TestCase
         $this->submissionApiClient = SubmissionApiClient::create($_ENV['DEQAR_API_USERNAME'], $_ENV['DEQAR_API_PASSWORD'], true);
     }
 
+    /**
+     * @return SubmitReportRequest[][]
+     */
     public function provideSubmitReportRequestValid(): array
     {
         return [[SubmitReportRequestTest::createSubmitReportRequest()]];

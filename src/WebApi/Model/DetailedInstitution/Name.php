@@ -8,6 +8,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class Name
 {
+    /**
+     * @param string $official
+     * @param string $officalTransliterated
+     * @param string $english
+     * @param string $acronym
+     * @param string $sourceNote
+     * @param string|null $validTo
+     */
     public function __construct(
         #[SerializedName('name_official')]
         public string $official,

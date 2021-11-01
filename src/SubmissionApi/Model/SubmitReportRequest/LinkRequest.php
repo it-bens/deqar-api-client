@@ -10,6 +10,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class LinkRequest
 {
+    /**
+     * @param string $link
+     * @param string|null $displayName
+     */
     public function __construct(
         #[SerializedName('link')]
         public string $link,

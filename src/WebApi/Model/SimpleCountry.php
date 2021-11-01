@@ -8,6 +8,16 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class SimpleCountry
 {
+    /**
+     * @param int $id
+     * @param string $countryCode
+     * @param string $externalQaaIsPermitted
+     * @param string $europeanApproachIsPermitted
+     * @param bool $hasFullInstitutionList
+     * @param string $eheaKeyCommitment
+     * @param int $agencyCount
+     * @param string|null $eqarGovernmentalMemberStart
+     */
     public function __construct(
         #[SerializedName('id')]
         public int $id,

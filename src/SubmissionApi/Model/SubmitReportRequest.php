@@ -28,6 +28,24 @@ final class SubmitReportRequest
     #[SerializedName('date_format')]
     public string $dateFormat = self::REPORT_DATE_FORMAT;
 
+    /**
+     * @param string $agency
+     * @param string $activity
+     * @param string $status
+     * @param string $decision
+     * @param string $validFrom
+     * @param FileRequest[] $files
+     * @param InstitutionRequest[] $institutions
+     * @param ProgrammeRequest[] $programmes
+     * @param string|null $id
+     * @param string[]|null $contributingAgencies
+     * @param string|null $localIdentifier
+     * @param string|null $activityLocalIdentifier
+     * @param string|null $summary
+     * @param string|null $validTo
+     * @param LinkRequest[]|null $links
+     * @param string|null $comment
+     */
     public function __construct(
         #[SerializedName('agency')]
         public string $agency,

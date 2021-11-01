@@ -8,6 +8,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class Activity
 {
+    /**
+     * @param int $id
+     * @param string $activity
+     * @param string $description
+     * @param string $type
+     * @param string|null $reportsLink
+     * @param string|null $validTo
+     */
     public function __construct(
         #[SerializedName('id')]
         public int $id,

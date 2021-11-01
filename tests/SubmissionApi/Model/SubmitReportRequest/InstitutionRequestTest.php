@@ -63,6 +63,9 @@ final class InstitutionRequestTest extends TestCase
         return [[$request]];
     }
 
+    /**
+     * @return InstitutionRequest[][]
+     */
     public function provideRequestInvalidEterId(): array
     {
         $request = self::createInstitutionRequest();

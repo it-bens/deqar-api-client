@@ -30,6 +30,6 @@ case ${COMMAND} in
         docker-compose run --rm -T app /root/.composer/vendor/bin/phpcbf --standard=PSR1,PSR12 "${@:2}"
         ;;
     "code-check")
-        docker-compose run --rm -T phpunit vendor/bin/phpstan analyse src tests --level max
+        docker-compose run --rm -T phpunit php -d memory_limit=2G vendor/bin/phpstan analyse src tests --level 8
         ;;
 esac

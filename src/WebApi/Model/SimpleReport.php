@@ -4,10 +4,34 @@ declare(strict_types=1);
 
 namespace ITB\DeqarApiClient\WebApi\Model;
 
+use ITB\DeqarApiClient\WebApi\Model\SimpleReport\Institution;
+use ITB\DeqarApiClient\WebApi\Model\SimpleReport\Programme;
+use ITB\DeqarApiClient\WebApi\Model\SimpleReport\ReportFile;
+use ITB\DeqarApiClient\WebApi\Model\SimpleReport\ReportLink;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class SimpleReport
 {
+    /**
+     * @param int $id
+     * @param string $agencyName
+     * @param string $agencyAcronym
+     * @param string $agencyEsgActivity
+     * @param string $agencyEsgActivityType
+     * @param Institution[] $institutions
+     * @param Programme[] $programmes
+     * @param string $validFrom
+     * @param string $status
+     * @param string $decision
+     * @param ReportFile[] $reportFiles
+     * @param ReportLink[] $reportLinks
+     * @param string $created
+     * @param string $updated
+     * @param string $flagLevel
+     * @param string[] $localIds
+     * @param string|null $validTo
+     * @param string[] $countries
+     */
     public function __construct(
         #[SerializedName('id')]
         public int $id,
@@ -32,7 +56,7 @@ final class SimpleReport
         #[SerializedName('report_files')]
         public array $reportFiles,
         #[SerializedName('report_links')]
-        public array $report_links,
+        public array $reportLinks,
         #[SerializedName('date_created')]
         public string $created,
         #[SerializedName('date_updated')]

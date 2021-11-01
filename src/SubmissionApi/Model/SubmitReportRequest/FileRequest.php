@@ -11,6 +11,11 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class FileRequest
 {
+    /**
+     * @param string $originalLocation
+     * @param string[] $languages
+     * @param string|null $displayName
+     */
     public function __construct(
         #[SerializedName('original_location')]
         public string $originalLocation,

@@ -9,6 +9,19 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class SimpleAgency
 {
+    /**
+     * @param int $id
+     * @param string $deqarId
+     * @param string $namePrimary
+     * @param Activity[] $activities
+     * @param string $registrationStart
+     * @param string $registrationValidTo
+     * @param string $registrationNote
+     * @param int $institutionCount
+     * @param int $reportCount
+     * @param string|null $nameOfficialDisplay
+     * @param string|null $logoLink
+     */
     public function __construct(
         #[SerializedName('id')]
         public int $id,

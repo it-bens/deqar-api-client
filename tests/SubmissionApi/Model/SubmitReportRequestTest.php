@@ -151,6 +151,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidFilesType(): array
     {
         $request = self::createSubmitReportRequest();
+        /** @phpstan-ignore-next-line */
         $request->files = ['File1', 1337, true];
 
         return [[$request]];
@@ -173,6 +174,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidInstitutions(): array
     {
         $request = self::createSubmitReportRequest();
+        /** @phpstan-ignore-next-line */
         $request->institutions = ['Institution1', 1337, true];
 
         return [[$request]];
@@ -195,6 +197,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidLinksType(): array
     {
         $request = self::createSubmitReportRequest();
+        /** @phpstan-ignore-next-line */
         $request->links = ['Link1', 1337, true];
 
         return [[$request]];
@@ -217,6 +220,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidProgrammes(): array
     {
         $request = self::createSubmitReportRequest();
+        /** @phpstan-ignore-next-line */
         $request->programmes = ['Programme1', 1337, true];
 
         return [[$request]];

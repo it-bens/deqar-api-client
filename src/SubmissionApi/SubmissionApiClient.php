@@ -38,7 +38,7 @@ final class SubmissionApiClient implements SubmissionApiClientInterface
 
     private string $reportSubmitEndpoint;
     private string $reportDeleteEndpoint;
-    private ?string $authToken = null;
+    private string $authToken;
 
     public function __construct(
         private string $username,
@@ -105,7 +105,7 @@ final class SubmissionApiClient implements SubmissionApiClientInterface
 
     private function authenticate(): void
     {
-        if (null === $this->authToken) {
+        if (!isset($this->authToken)) {
             $this->authToken = $this->getAuthToken($this->username, $this->password);
         }
     }

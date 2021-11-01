@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ITB\DeqarApiClient\WebApi;
 
 use ITB\DeqarApiClient\AuthenticationTrait;
+use ITB\DeqarApiClient\Exception\AuthenticationFailed;
 use ITB\DeqarApiClient\RequestTrait;
 use ITB\DeqarApiClient\SerializerTrait;
 use ITB\DeqarApiClient\WebApi\Model\DetailedInstitution;
@@ -31,7 +32,7 @@ final class WebApiClient implements WebApiClientInterface
 
     private const MAX_RESULTS_PER_REQUEST = 1000;
 
-    private ?string $authToken = null;
+    private string $authToken;
 
     public function __construct(
         private string $username,
@@ -222,7 +223,7 @@ final class WebApiClient implements WebApiClientInterface
 
     private function authenticate(): void
     {
-        if (null === $this->authToken) {
+        if (!isset($this->authToken)) {
             $this->authToken = $this->getAuthToken($this->username, $this->password);
         }
     }

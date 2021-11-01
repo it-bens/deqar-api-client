@@ -48,6 +48,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidAlternativeNamesType(): array
     {
         $request = self::createProgrammeRequest();
+        /** @phpstan-ignore-next-line */
         $request->alternativeNames = ['AlternativeName1', 1337, true];
 
         return [[$request]];
@@ -70,6 +71,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidCountriesInvalidCountryCode(): array
     {
         $request = self::createProgrammeRequest();
+        /** @phpstan-ignore-next-line */
         $request->countries = ['eng', 123];
 
         return [[$request]];
@@ -92,6 +94,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     public function provideRequestInvalidIdentifiersType(): array
     {
         $request = self::createProgrammeRequest();
+        /** @phpstan-ignore-next-line */
         $request->identifiers = ['Identifier1', 1337, true];
 
         return [[$request]];
