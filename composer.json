@@ -24,7 +24,7 @@
   "require-dev": {
     "ext-apcu": "*",
     "captainhook/plugin-composer": "^5.3",
-    "phpstan/phpstan": "^0.12.99",
+    "phpstan/phpstan": "^1.0",
     "phpunit/phpunit": "^9.5",
     "roave/security-advisories": "dev-latest"
   },
