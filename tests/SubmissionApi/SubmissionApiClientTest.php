@@ -12,7 +12,7 @@ use ITB\DeqarApiClient\SubmissionApi\SubmissionApiClientInterface;
 use ITB\DeqarApiClient\Tests\SubmissionApi\Model\SubmitReportRequestTest;
 use PHPUnit\Framework\TestCase;
 
-final class SubmissionApiTest extends TestCase
+final class SubmissionApiClientTest extends TestCase
 {
     private SubmissionApiClientInterface $submissionApiClient;
 

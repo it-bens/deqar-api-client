@@ -78,9 +78,6 @@ final class WebApiClient implements WebApiClientInterface
             if ($identifier === (string)$activity->id) {
                 return $activity;
             }
-            if ($identifier === $activity->activity) {
-                return $activity;
-            }
         }
 
         return null;
@@ -173,6 +170,9 @@ final class WebApiClient implements WebApiClientInterface
 
         $institutions = $this->getInstitutions();
         foreach ($institutions as $institution) {
+            if ($identifier === (string)$institution->id) {
+                return $institution;
+            }
             if ($identifier === $institution->deqarId) {
                 return $institution;
             }

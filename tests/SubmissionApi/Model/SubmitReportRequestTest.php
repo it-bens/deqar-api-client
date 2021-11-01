@@ -429,7 +429,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     }
 
     /**
-     * @dataProvider provideRequestInvalidFilesEmpty
+     * @dataProvider provideRequestInvalidLinksEmpty
      * @param SubmitReportRequest $request
      */
     public function testInvalidLinksEmpty(SubmitReportRequest $request): void
