@@ -22,7 +22,6 @@
     "symfony/validator": "^5.3"
   },
   "require-dev": {
-    "ext-apcu": "*",
     "captainhook/plugin-composer": "^5.3",
     "phpstan/phpstan": "^1.0",
     "phpunit/phpunit": "^9.5",
