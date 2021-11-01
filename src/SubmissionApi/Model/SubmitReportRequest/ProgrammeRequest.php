@@ -16,6 +16,15 @@ final class ProgrammeRequest
     public const PROGRAMME_QF_EHEA_LEVEL_SECOND_CYCLE = 'second cycle';
     public const PROGRAMME_QF_EHEA_LEVEL_THIRD_CYCLE = 'third cycle';
 
+    /**
+     * @param string $namePrimary
+     * @param ProgrammeIdentifierRequest[]|null $identifiers
+     * @param string|null $qualificationPrimary
+     * @param ProgrammeNameRequest[]|null $alternativeNames
+     * @param string[]|null $countries
+     * @param string|null $nqfLevel
+     * @param string|null $qfEheaLevel
+     */
     public function __construct(
         #[SerializedName('name_primary')]
         public string $namePrimary,

@@ -6,6 +6,7 @@ namespace ITB\DeqarApiClient;
 
 use ITB\DeqarApiClient\Exception\RequestFailed;
 use JsonException;
+use RuntimeException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -15,15 +16,30 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 trait RequestTrait
 {
+    /**
+     * @phpstan-ignore-next-line
+     * @param HttpClientInterface $httpClient
+     * @param string $uri
+     * @param string $method
+     * @param string $token
+     * @param array $query
+     * @param array $json
+     * @return ResponseInterface
+     */
     private function doRequest(HttpClientInterface $httpClient, string $uri, string $method, string $token, array $query = [], array $json = []): ResponseInterface
     {
         try {
             return $httpClient->request($method, $uri, ['auth_bearer' => $token, 'query' => $query, 'json' => $json]);
         } catch (TransportExceptionInterface $exception) {
-            // TODO: throw exception
+            throw new RuntimeException('The request failed because of a JSON error.', previous: $exception);
         }
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     * @param ResponseInterface $response
+     * @return array
+     */
     private function parseJsonResponse(ResponseInterface $response): array
     {
         $content = $this->parseResponse($response);
@@ -31,7 +47,7 @@ trait RequestTrait
         try {
             return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            // TODO: throw exception
+            throw new RuntimeException('The response parsing failed because of a JSON error.', previous: $exception);
         }
     }
 
@@ -77,6 +93,15 @@ trait RequestTrait
         return $content;
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     * @param HttpClientInterface $httpClient
+     * @param string $uri
+     * @param string $method
+     * @param string $token
+     * @param int $resultsPerRequest
+     * @return array
+     */
     private function requestAll(HttpClientInterface $httpClient, string $uri, string $method, string $token, int $resultsPerRequest): array
     {
         $limit = $resultsPerRequest;
@@ -106,6 +131,14 @@ trait RequestTrait
         return $results;
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     * @param HttpClientInterface $httpClient
+     * @param string $uri
+     * @param string $method
+     * @param string $token
+     * @return array|null
+     */
     private function requestSingle(HttpClientInterface $httpClient, string $uri, string $method, string $token): ?array
     {
         $response = $this->doRequest($httpClient, $uri, $method, $token);

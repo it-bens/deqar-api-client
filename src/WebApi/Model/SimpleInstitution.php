@@ -8,6 +8,17 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class SimpleInstitution
 {
+    /**
+     * @param int $id
+     * @param string $deqarId
+     * @param string $namePrimary
+     * @param string $nameSelectDisplay
+     * @param string $nameOfficialDisplay
+     * @param string|null $eterId
+     * @param string|null $website
+     * @param string[] $countries
+     * @param string[] $qfEheaLevel
+     */
     public function __construct(
         #[SerializedName('id')]
         public int $id,

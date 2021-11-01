@@ -8,6 +8,13 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class QfEheaLevel
 {
+    /**
+     * @param string $level
+     * @param string $source
+     * @param string $sourceNote
+     * @param string|null $validFrom
+     * @param string|null $validTo
+     */
     public function __construct(
         #[SerializedName('qf_ehea_level')]
         public string $level,

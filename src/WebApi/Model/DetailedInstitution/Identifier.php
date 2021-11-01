@@ -8,6 +8,13 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class Identifier
 {
+    /**
+     * @param string $id
+     * @param string $resource
+     * @param string $validFrom
+     * @param string|null $agency
+     * @param string|null $validTo
+     */
     public function __construct(
         #[SerializedName('identifier')]
         public string $id,

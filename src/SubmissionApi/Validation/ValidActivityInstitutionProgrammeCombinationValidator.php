@@ -6,6 +6,7 @@ namespace ITB\DeqarApiClient\SubmissionApi\Validation;
 
 use ITB\DeqarApiClient\SubmissionApi\Model\SubmitReportRequest;
 use ITB\DeqarApiClient\WebApi\WebApiClientInterface;
+use RuntimeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -35,6 +36,7 @@ final class ValidActivityInstitutionProgrammeCombinationValidator extends Constr
 
         $activity = $this->webApiClient->getActivity($value->activity);
         if (null === $activity) {
+            throw new RuntimeException(sprintf('The %s must be called after the existence of the activity is validated.', self::class));
         }
 
         switch ($activity->type) {

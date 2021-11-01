@@ -10,6 +10,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class ProgrammeIdentifierRequest
 {
+    /**
+     * @param string $identifier
+     * @param string|null $resource
+     */
     public function __construct(
         #[SerializedName('identifier')]
         public string $identifier,

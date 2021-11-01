@@ -11,6 +11,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class InstitutionRequest
 {
+    /**
+     * @param string|null $deqarId
+     * @param string|null $eterId
+     */
     public function __construct(
         #[SerializedName('deqar_id')]
         public ?string $deqarId = null,

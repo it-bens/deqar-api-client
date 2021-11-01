@@ -10,6 +10,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class ProgrammeNameRequest
 {
+    /**
+     * @param string $name
+     * @param string|null $qualification
+     */
     public function __construct(
         #[SerializedName('name_alternative')]
         public string $name,

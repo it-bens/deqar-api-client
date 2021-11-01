@@ -8,6 +8,8 @@ use ITB\DeqarApiClient\WebApi\Model\DetailedInstitution;
 use ITB\DeqarApiClient\WebApi\Model\SimpleAgency;
 use ITB\DeqarApiClient\WebApi\Model\SimpleCountry;
 use ITB\DeqarApiClient\WebApi\Model\SimpleInstitution;
+use ITB\DeqarApiClient\WebApi\Model\SimpleReport;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -54,7 +56,7 @@ final class CachedWebApiClient implements WebApiClientInterface
 
     /**
      * @return SimpleAgency\Activity[]
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getActivities(): array
     {
@@ -78,7 +80,7 @@ final class CachedWebApiClient implements WebApiClientInterface
     /**
      * @param string $identifier
      * @return SimpleAgency\Activity|null
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getActivity(string $identifier): ?SimpleAgency\Activity
     {
@@ -96,7 +98,7 @@ final class CachedWebApiClient implements WebApiClientInterface
 
     /**
      * @return SimpleAgency[]
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getAgencies(): array
     {
@@ -134,7 +136,7 @@ final class CachedWebApiClient implements WebApiClientInterface
     /**
      * @param string $identifier
      * @return SimpleAgency|null
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getAgencySimple(string $identifier): ?SimpleAgency
     {
@@ -179,7 +181,7 @@ final class CachedWebApiClient implements WebApiClientInterface
 
     /**
      * @return SimpleCountry[]
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getCountries(): array
     {
@@ -210,7 +212,7 @@ final class CachedWebApiClient implements WebApiClientInterface
     /**
      * @param string $id
      * @return DetailedInstitution|null
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getInstitutionDetailed(string $id): ?DetailedInstitution
     {
@@ -228,7 +230,7 @@ final class CachedWebApiClient implements WebApiClientInterface
     /**
      * @param string $identifier
      * @return SimpleInstitution|null
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getInstitutionSimple(string $identifier): ?SimpleInstitution
     {
@@ -273,7 +275,7 @@ final class CachedWebApiClient implements WebApiClientInterface
 
     /**
      * @return SimpleInstitution[]
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getInstitutions(): array
     {
@@ -309,8 +311,8 @@ final class CachedWebApiClient implements WebApiClientInterface
     }
 
     /**
-     * @return array
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @return SimpleReport[]
+     * @throws InvalidArgumentException
      */
     public function getReports(): array
     {
