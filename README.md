@@ -39,6 +39,11 @@ The following methods are provided by the `WebApiClient`:
 * getInstitutionSimple (result: `SimpleInstitution` or null, identified by `deqar_id` or `eter_id`)
 * getReports (result: array of `SimpleReport` objects, use with caution because over 60K reports are returned)
 
+The favourable implementation of the `WebApiClientInterface` is the `CachedWebApiClient`. 
+It uses the symfony/cache-contracts to cache the responses and increase the performance in decrease the WebApi hits.
+When created via the static function, the filesystem adapter is used for caching. By using the constructor,
+any adapter implementing the `CacheInterface`, can be used. The client caches its results for 1 day (86400 seconds).
+
 ### SubmissionAPI
 The submission API implements only two endpoints: submit/update a report and delete a report.
 The submission process involves severs server-sided checks of the provided data. 
