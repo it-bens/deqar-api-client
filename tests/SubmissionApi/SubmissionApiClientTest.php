@@ -41,7 +41,7 @@ final class SubmissionApiClientTest extends TestCase
 
     public function testDeleteReport(): void
     {
-        $response = $this->submissionApiClient->deleteReport('70013');
+        $response = $this->submissionApiClient->deleteReport('14229');
         self::assertInstanceOf(DeleteReportResponseSuccess::class, $response);
     }
 }
