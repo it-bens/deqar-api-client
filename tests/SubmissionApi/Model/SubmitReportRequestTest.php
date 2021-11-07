@@ -37,8 +37,6 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
             null,
             null,
             'ACQUIN-123456',
-            // Activity local identifier is not tested because API documentation seems to be incomplete. Awaiting response from DEQAR.
-            null,
             'I am a summary.',
             '2024-01-01',
             [LinkRequestTest::createLinkRequest()],
@@ -53,17 +51,6 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $request = self::createSubmitReportRequest();
         $request->activity = '798576897';
-
-        return [[$request]];
-    }
-
-    /**
-     * @return SubmitReportRequest[][]
-     */
-    public function provideRequestInvalidActivityLocalIdentifier(): array
-    {
-        $request = self::createSubmitReportRequest();
-        $request->activityLocalIdentifier = '';
 
         return [[$request]];
     }
@@ -292,18 +279,6 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
         self::assertCount(1, $violations);
         self::assertEquals('activity', $violations[0]->getPropertyPath());
         self::assertInstanceOf(ExistingActivity::class, $violations[0]->getConstraint());
-    }
-
-    /**
-     * @dataProvider provideRequestInvalidActivityLocalIdentifier
-     * @param SubmitReportRequest $request
-     */
-    public function testInvalidActivityLocalIdentifier(SubmitReportRequest $request): void
-    {
-        $violations = $this->validator->validate($request);
-        self::assertCount(1, $violations);
-        self::assertEquals('activityLocalIdentifier', $violations[0]->getPropertyPath());
-        self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
 
     /**

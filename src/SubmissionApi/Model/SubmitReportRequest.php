@@ -27,6 +27,9 @@ final class SubmitReportRequest
 
     #[SerializedName('date_format')]
     public string $dateFormat = self::REPORT_DATE_FORMAT;
+    #[SerializedName('activity_local_identifier')]
+    /** According to DEQAR, the local identifier shouldn't be used. The passed value has to exist already in the EQAR database. */
+    public ?string $activityLocalIdentifier = null;
 
     /**
      * @param string $agency
@@ -40,7 +43,6 @@ final class SubmitReportRequest
      * @param string|null $id
      * @param string[]|null $contributingAgencies
      * @param string|null $localIdentifier
-     * @param string|null $activityLocalIdentifier
      * @param string|null $summary
      * @param string|null $validTo
      * @param LinkRequest[]|null $links
@@ -72,8 +74,6 @@ final class SubmitReportRequest
         public ?array $contributingAgencies = null,
         #[SerializedName('local_identifier')]
         public ?string $localIdentifier = null,
-        #[SerializedName('activity_local_identifier')]
-        public ?string $activityLocalIdentifier = null,
         #[SerializedName('summary')]
         public ?string $summary = null,
         #[SerializedName('valid_to')]
@@ -165,7 +165,6 @@ final class SubmitReportRequest
             ])
         );
         $metadata->addPropertyConstraint('localIdentifier', new Assert\Length(min: 1, max: 255, groups: ['simple']));
-        $metadata->addPropertyConstraint('activityLocalIdentifier', new Assert\Length(min: 1, max: 200, groups: ['simple']));
         $metadata->addPropertyConstraint('summary', new Assert\NotBlank(allowNull: true, groups: ['simple']));
         $metadata->addPropertyConstraint('validTo', new Assert\Date(groups: ['simple']));
         $metadata->addPropertyConstraint(
