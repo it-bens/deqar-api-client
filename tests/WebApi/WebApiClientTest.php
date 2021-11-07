@@ -13,7 +13,7 @@ use ITB\DeqarApiClient\WebApi\WebApiClient;
 use ITB\DeqarApiClient\WebApi\WebApiClientInterface;
 use PHPUnit\Framework\TestCase;
 
-final class WebClientTest extends TestCase
+final class WebApiClientTest extends TestCase
 {
     private WebApiClientInterface $webApiClient;
 
@@ -24,8 +24,8 @@ final class WebClientTest extends TestCase
 
     public function testGetActivities(): void
     {
-        $activites = $this->webApiClient->getActivities();
-        $this->assertContainsOnlyInstancesOf(SimpleAgency\Activity::class, $activites);
+        $activities = $this->webApiClient->getActivities();
+        self::assertContainsOnlyInstancesOf(SimpleAgency\Activity::class, $activities);
     }
 
     public function testGetActivity(): void
@@ -43,7 +43,7 @@ final class WebClientTest extends TestCase
     public function testGetAgencies(): void
     {
         $agencies = $this->webApiClient->getAgencies();
-        $this->assertContainsOnlyInstancesOf(SimpleAgency::class, $agencies);
+        self::assertContainsOnlyInstancesOf(SimpleAgency::class, $agencies);
     }
 
     public function testGetAgencySimple(): void
@@ -61,42 +61,64 @@ final class WebClientTest extends TestCase
     public function testGetCountries(): void
     {
         $countries = $this->webApiClient->getCountries();
-        $this->assertContainsOnlyInstancesOf(SimpleCountry::class, $countries);
+        self::assertContainsOnlyInstancesOf(SimpleCountry::class, $countries);
     }
 
     public function testGetInstitutionDetailed(): void
     {
         $institution = $this->webApiClient->getInstitutionDetailed('2191');
-        $this->assertInstanceOf(DetailedInstitution::class, $institution);
+        self::assertInstanceOf(DetailedInstitution::class, $institution);
     }
 
     public function testGetInstitutionDetailedInvalid(): void
     {
         $institution = $this->webApiClient->getInstitutionDetailed('0');
-        $this->assertNull($institution);
+        self::assertNull($institution);
     }
 
     public function testGetInstitutionSimple(): void
     {
         $institution = $this->webApiClient->getInstitutionSimple('2191');
-        $this->assertInstanceOf(SimpleInstitution::class, $institution);
+        self::assertInstanceOf(SimpleInstitution::class, $institution);
     }
 
     public function testGetInstitutionSimpleInvalid(): void
     {
         $institution = $this->webApiClient->getInstitutionSimple('0');
-        $this->assertNull($institution);
+        self::assertNull($institution);
     }
 
+    /**
+     * This test will be disabled for CI pipelines for performance reasons.
+     * @group local-only
+     */
     public function testGetInstitutions(): void
     {
         $institutions = $this->webApiClient->getInstitutions();
-        $this->assertContainsOnlyInstancesOf(SimpleInstitution::class, $institutions);
+        self::assertContainsOnlyInstancesOf(SimpleInstitution::class, $institutions);
     }
 
+    public function testGetInstitutionsWithLimit(): void
+    {
+        $institutions = $this->webApiClient->getInstitutions(1500);
+        self::assertCount(1500, $institutions);
+        self::assertContainsOnlyInstancesOf(SimpleInstitution::class, $institutions);
+    }
+
+    /**
+     * This test will be disabled for CI pipelines for performance reasons.
+     * @group local-only
+     */
     public function testGetReports(): void
     {
         $reports = $this->webApiClient->getReports();
-        $this->assertContainsOnlyInstancesOf(SimpleReport::class, $reports);
+        self::assertContainsOnlyInstancesOf(SimpleReport::class, $reports);
+    }
+
+    public function testGetReportsWithLimit(): void
+    {
+        $reports = $this->webApiClient->getReports(3000);
+        self::assertCount(3000, $reports);
+        self::assertContainsOnlyInstancesOf(SimpleReport::class, $reports);
     }
 }

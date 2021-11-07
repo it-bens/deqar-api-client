@@ -21,26 +21,21 @@ final class CachedWebApiClient implements WebApiClientInterface
     private const EXPIRATION_TIME = 86400;
 
     private const CACHE_KEY_ACTIVITIES = 'deqar.web_api.activities';
-    private const CACHE_KEY_ACTIVITY_BY_ID = 'deqar.web_api.activities.id.';
+    private const CACHE_KEY_ACTIVITY_TEMPLATE = 'deqar.web_api.activities.%s.%s';
 
     private const CACHE_KEY_AGENCIES = 'deqar.web_api.agencies';
-    private const CACHE_KEY_AGENCY_BY_ID = 'deqar.web_api.agencies.id.';
-    private const CACHE_KEY_AGENCY_BY_DEQAR_ID = 'deqar.web_api.agencies.deqar_id.';
-    private const CACHE_KEY_AGENCY_BY_NAME_PRIMARY = 'deqar.web_api.agencies.name_primary.';
+    private const CACHE_KEY_AGENCY_TEMPLATE = 'deqar.web_api.agencies.%s.%s';
 
     private const CACHE_KEY_COUNTRIES = 'deqar.web_api.countries';
-    private const CACHE_KEY_COUNTRY_BY_ID = 'deqar.web_api.countries.id.';
-    private const CACHE_KEY_COUNTRY_BY_COUNTRY_CODE = 'deqar.web_api.countries.country_code.';
+    private const CACHE_KEY_COUNTRY_TEMPLATE = 'deqar.web_api.countries.%s.%s';
 
     private const CACHE_KEY_INSTITUTIONS = 'deqar.web_api.institutions';
-    private const CACHE_KEY_INSTITUTION_BY_ID = 'deqar.web_api.institutions.id.';
-    private const CACHE_KEY_INSTITUTION_BY_DEQAR_ID = 'deqar.web_api.institutions.deqar_id.';
-    private const CACHE_KEY_INSTITUTION_BY_NAME_PRIMARY = 'deqar.web_api.institutions.name_primary.';
+    private const CACHE_KEY_INSTITUTION_TEMPLATE = 'deqar.web_api.institutions.%s.%s';
 
     private const CACHE_KEY_INSTITUTION_DETAILED_BY_ID = 'deqar.web_api.institutions_detailed.id';
 
     private const CACHE_KEY_REPORTS = 'deqar.web_api.reports';
-    private const CACHE_KEY_REPORT_BY_ID = 'deqar.web_api.reports.';
+    private const CACHE_KEY_REPORT_TEMPLATE = 'deqar.web_api.reports.%s.%s';
 
     private SluggerInterface $slugger;
 
@@ -55,6 +50,29 @@ final class CachedWebApiClient implements WebApiClientInterface
     }
 
     /**
+     * @param SimpleAgency\Activity[] $activities
+     * @throws InvalidArgumentException
+     */
+    public function cacheActivities(array $activities): void
+    {
+        foreach ($activities as $activity) {
+            $this->cacheActivity($activity, 'id', (string)$activity->id);
+        }
+    }
+
+    /**
+     * @param SimpleCountry[] $countries
+     * @throws InvalidArgumentException
+     */
+    public function cacheCountries(array $countries): void
+    {
+        foreach ($countries as $country) {
+            $this->cacheCountry($country, 'id', (string)$country->id);
+            $this->cacheCountry($country, 'country_code', $country->countryCode);
+        }
+    }
+
+    /**
      * @return SimpleAgency\Activity[]
      * @throws InvalidArgumentException
      */
@@ -62,18 +80,10 @@ final class CachedWebApiClient implements WebApiClientInterface
     {
         return $this->cache->get(self::CACHE_KEY_ACTIVITIES, function (ItemInterface $item) {
             $item->expiresAfter(self::EXPIRATION_TIME);
-            $remoteActivities = $this->webApiClient->getActivities();
-            foreach ($remoteActivities as $remoteActivity) {
-                $this->cache->get(
-                    self::CACHE_KEY_ACTIVITY_BY_ID . $this->slugger->slug((string)$remoteActivity->id),
-                    function (ItemInterface $activityItem) use ($remoteActivity) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteActivity;
-                    }
-                );
-            }
+            $activities = $this->webApiClient->getActivities();
+            $this->cacheActivities($activities);
 
-            return $remoteActivities;
+            return $activities;
         });
     }
 
@@ -87,13 +97,11 @@ final class CachedWebApiClient implements WebApiClientInterface
         // This ensures the activity cache is filled.
         $this->getActivities();
 
-        return $this->cache->get(
-            self::CACHE_KEY_ACTIVITY_BY_ID . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
+        if (null !== $activityById = $this->cacheActivity(null, 'id', $identifier)) {
+            return $activityById;
+        }
+
+        return null;
     }
 
     /**
@@ -104,32 +112,10 @@ final class CachedWebApiClient implements WebApiClientInterface
     {
         return $this->cache->get(self::CACHE_KEY_AGENCIES, function (ItemInterface $item) {
             $item->expiresAfter(self::EXPIRATION_TIME);
-            $remoteAgencies = $this->webApiClient->getAgencies();
-            foreach ($remoteAgencies as $remoteAgency) {
-                $this->cache->get(
-                    self::CACHE_KEY_AGENCY_BY_ID . $this->slugger->slug((string)$remoteAgency->id),
-                    function (ItemInterface $activityItem) use ($remoteAgency) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteAgency;
-                    }
-                );
-                $this->cache->get(
-                    self::CACHE_KEY_AGENCY_BY_DEQAR_ID . $this->slugger->slug($remoteAgency->deqarId),
-                    function (ItemInterface $activityItem) use ($remoteAgency) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteAgency;
-                    }
-                );
-                $this->cache->get(
-                    self::CACHE_KEY_AGENCY_BY_NAME_PRIMARY . $this->slugger->slug($remoteAgency->namePrimary),
-                    function (ItemInterface $activityItem) use ($remoteAgency) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteAgency;
-                    }
-                );
-            }
+            $agencies = $this->webApiClient->getAgencies();
+            $this->cacheAgencies($agencies);
 
-            return $remoteAgencies;
+            return $agencies;
         });
     }
 
@@ -143,37 +129,16 @@ final class CachedWebApiClient implements WebApiClientInterface
         // This ensures the agency cache is filled.
         $this->getAgencies();
 
-        $agencyById = $this->cache->get(
-            self::CACHE_KEY_AGENCY_BY_ID . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $agencyById) {
+        if (null !== $agencyById = $this->cacheAgency(null, 'id', $identifier)) {
             return $agencyById;
         }
 
-        $agencyById = $this->cache->get(
-            self::CACHE_KEY_AGENCY_BY_DEQAR_ID . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $agencyById) {
-            return $agencyById;
+        if (null !== $agencyByDeqarId = $this->cacheAgency(null, 'deqar_id', $identifier)) {
+            return $agencyByDeqarId;
         }
 
-        $agencyById = $this->cache->get(
-            self::CACHE_KEY_AGENCY_BY_NAME_PRIMARY . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $agencyById) {
-            return $agencyById;
+        if (null !== $agencyByNamePrimary = $this->cacheAgency(null, 'name_primary', $identifier)) {
+            return $agencyByNamePrimary;
         }
 
         return null;
@@ -187,25 +152,10 @@ final class CachedWebApiClient implements WebApiClientInterface
     {
         return $this->cache->get(self::CACHE_KEY_COUNTRIES, function (ItemInterface $item) {
             $item->expiresAfter(self::EXPIRATION_TIME);
-            $remoteCountries = $this->webApiClient->getCountries();
-            foreach ($remoteCountries as $remoteCountry) {
-                $this->cache->get(
-                    self::CACHE_KEY_COUNTRY_BY_ID . $this->slugger->slug((string)$remoteCountry->id),
-                    function (ItemInterface $activityItem) use ($remoteCountry) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteCountry;
-                    }
-                );
-                $this->cache->get(
-                    self::CACHE_KEY_COUNTRY_BY_COUNTRY_CODE . $this->slugger->slug($remoteCountry->countryCode),
-                    function (ItemInterface $activityItem) use ($remoteCountry) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteCountry;
-                    }
-                );
-            }
+            $countries = $this->webApiClient->getCountries();
+            $this->cacheCountries($countries);
 
-            return $remoteCountries;
+            return $countries;
         });
     }
 
@@ -216,15 +166,10 @@ final class CachedWebApiClient implements WebApiClientInterface
      */
     public function getInstitutionDetailed(string $id): ?DetailedInstitution
     {
-        $institutionById = $this->cache->get(
-            self::CACHE_KEY_INSTITUTION_DETAILED_BY_ID . $this->slugger->slug($id),
-            function (ItemInterface $item) use ($id) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getInstitutionDetailed($id);
-            }
-        );
-
-        return $institutionById;
+        return $this->cache->get(self::CACHE_KEY_INSTITUTION_DETAILED_BY_ID . $this->slugger->slug($id), function (ItemInterface $item) use ($id) {
+            $item->expiresAfter(self::EXPIRATION_TIME);
+            return $this->webApiClient->getInstitutionDetailed($id);
+        });
     }
 
     /**
@@ -237,37 +182,16 @@ final class CachedWebApiClient implements WebApiClientInterface
         // This ensures the institution cache is filled.
         $this->getInstitutions();
 
-        $institutionById = $this->cache->get(
-            self::CACHE_KEY_INSTITUTION_BY_ID . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $institutionById) {
+        if (null !== $institutionById = $this->cacheInstitution(null, 'id', $identifier)) {
             return $institutionById;
         }
 
-        $institutionById = $this->cache->get(
-            self::CACHE_KEY_INSTITUTION_BY_DEQAR_ID . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $institutionById) {
-            return $institutionById;
+        if (null !== $institutionByDeqarId = $this->cacheInstitution(null, 'deqar_id', $identifier)) {
+            return $institutionByDeqarId;
         }
 
-        $institutionById = $this->cache->get(
-            self::CACHE_KEY_INSTITUTION_BY_NAME_PRIMARY . $this->slugger->slug($identifier),
-            function (ItemInterface $item) use ($identifier) {
-                $item->expiresAfter(self::EXPIRATION_TIME);
-                return $this->webApiClient->getActivity($identifier);
-            }
-        );
-        if (null !== $institutionById) {
-            return $institutionById;
+        if (null !== $institutionByNamePrimary = $this->cacheInstitution(null, 'name_primary', $identifier)) {
+            return $institutionByNamePrimary;
         }
 
         return null;
@@ -277,36 +201,17 @@ final class CachedWebApiClient implements WebApiClientInterface
      * @return SimpleInstitution[]
      * @throws InvalidArgumentException
      */
-    public function getInstitutions(): array
+    public function getInstitutions(?int $limit = null, int $offset = 0): array
     {
-        return $this->cache->get(self::CACHE_KEY_INSTITUTIONS, function (ItemInterface $item) {
+        $cacheKey = self::CACHE_KEY_INSTITUTIONS . '_LIMIT_' . ((null !== $limit)
+                ? (string)$limit
+                : 'NULL') . '_OFFSET_' . $offset;
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($limit, $offset) {
             $item->expiresAfter(self::EXPIRATION_TIME);
-            $remoteInstitutions = $this->webApiClient->getInstitutions();
-            foreach ($remoteInstitutions as $remoteInstitution) {
-                $this->cache->get(
-                    self::CACHE_KEY_INSTITUTION_BY_ID . $this->slugger->slug((string)$remoteInstitution->id),
-                    function (ItemInterface $activityItem) use ($remoteInstitution) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteInstitution;
-                    }
-                );
-                $this->cache->get(
-                    self::CACHE_KEY_INSTITUTION_BY_DEQAR_ID . $this->slugger->slug($remoteInstitution->deqarId),
-                    function (ItemInterface $activityItem) use ($remoteInstitution) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteInstitution;
-                    }
-                );
-                $this->cache->get(
-                    self::CACHE_KEY_INSTITUTION_BY_NAME_PRIMARY . $this->slugger->slug($remoteInstitution->namePrimary),
-                    function (ItemInterface $activityItem) use ($remoteInstitution) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteInstitution;
-                    }
-                );
-            }
+            $institutions = $this->webApiClient->getInstitutions($limit, $offset);
+            $this->cacheInstitutions($institutions);
 
-            return $remoteInstitutions;
+            return $institutions;
         });
     }
 
@@ -314,22 +219,138 @@ final class CachedWebApiClient implements WebApiClientInterface
      * @return SimpleReport[]
      * @throws InvalidArgumentException
      */
-    public function getReports(): array
+    public function getReports(?int $limit = null, int $offset = 0): array
     {
-        return $this->cache->get(self::CACHE_KEY_REPORTS, function (ItemInterface $item) {
+        $cacheKey = self::CACHE_KEY_REPORTS . '_LIMIT_' . ((null !== $limit)
+                ? (string)$limit
+                : 'NULL') . '_OFFSET_' . $offset;
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($limit, $offset) {
             $item->expiresAfter(self::EXPIRATION_TIME);
-            $remoteReports = $this->webApiClient->getReports();
-            foreach ($remoteReports as $remoteReport) {
-                $this->cache->get(
-                    self::CACHE_KEY_REPORT_BY_ID . $this->slugger->slug((string)$remoteReport->id),
-                    function (ItemInterface $activityItem) use ($remoteReport) {
-                        $activityItem->expiresAfter(self::EXPIRATION_TIME);
-                        return $remoteReport;
-                    }
-                );
-            }
+            $remoteReports = $this->webApiClient->getReports($limit, $offset);
+            $this->cacheReports($remoteReports);
 
             return $remoteReports;
         });
+    }
+
+    /**
+     * @param SimpleAgency\Activity|null $activity
+     * @param string $identifierType
+     * @param string $identifier
+     * @return SimpleAgency\Activity|null
+     * @throws InvalidArgumentException
+     */
+    private function cacheActivity(?SimpleAgency\Activity $activity, string $identifierType, string $identifier): ?SimpleAgency\Activity
+    {
+        $cacheKey = sprintf(self::CACHE_KEY_ACTIVITY_TEMPLATE, $identifierType, $this->slugger->slug($identifier));
+        return $this->cache->get($cacheKey, function (ItemInterface $cacheItem) use ($activity, $identifier) {
+            $cacheItem->expiresAfter(self::EXPIRATION_TIME);
+            return $activity ?? $this->webApiClient->getActivity($identifier);
+        });
+    }
+
+    /**
+     * @param SimpleAgency[] $agencies
+     * @throws InvalidArgumentException
+     */
+    private function cacheAgencies(array $agencies): void
+    {
+        foreach ($agencies as $agency) {
+            $this->cacheAgency($agency, 'id', (string)$agency->id);
+            $this->cacheAgency($agency, 'deqar_id', $agency->deqarId);
+            $this->cacheAgency($agency, 'name_primary', $agency->namePrimary);
+        }
+    }
+
+    /**
+     * @param SimpleAgency|null $agency
+     * @param string $identifierType
+     * @param string $identifier
+     * @return SimpleAgency|null
+     * @throws InvalidArgumentException
+     */
+    private function cacheAgency(?SimpleAgency $agency, string $identifierType, string $identifier): ?SimpleAgency
+    {
+        $cacheKey = sprintf(self::CACHE_KEY_AGENCY_TEMPLATE, $identifierType, $this->slugger->slug($identifier));
+        return $this->cache->get($cacheKey, function (ItemInterface $cacheItem) use ($agency, $identifier) {
+            $cacheItem->expiresAfter(self::EXPIRATION_TIME);
+            return $agency ?? $this->webApiClient->getAgencySimple($identifier);
+        });
+    }
+
+    /**
+     * There is currently no getCountry() method in the WebApiClientInterface.
+     *
+     * @param SimpleCountry $country
+     * @param string $identifierType
+     * @param string $identifier
+     * @return SimpleCountry|null
+     * @throws InvalidArgumentException
+     */
+    private function cacheCountry(SimpleCountry $country, string $identifierType, string $identifier): ?SimpleCountry
+    {
+        $cacheKey = sprintf(self::CACHE_KEY_COUNTRY_TEMPLATE, $identifierType, $this->slugger->slug($identifier));
+        return $this->cache->get($cacheKey, function (ItemInterface $cacheItem) use ($country) {
+            $cacheItem->expiresAfter(self::EXPIRATION_TIME);
+            return $country;
+        });
+    }
+
+    /**
+     * @param SimpleInstitution|null $institution
+     * @param string $identifierType
+     * @param string $identifier
+     * @return SimpleInstitution|null
+     * @throws InvalidArgumentException
+     */
+    private function cacheInstitution(?SimpleInstitution $institution, string $identifierType, string $identifier): ?SimpleInstitution
+    {
+        $cacheKey = sprintf(self::CACHE_KEY_INSTITUTION_TEMPLATE, $identifierType, $this->slugger->slug($identifier));
+        return $this->cache->get($cacheKey, function (ItemInterface $cacheItem) use ($institution, $identifier) {
+            $cacheItem->expiresAfter(self::EXPIRATION_TIME);
+            return $institution ?? $this->webApiClient->getInstitutionSimple($identifier);
+        });
+    }
+
+    /**
+     * @param SimpleInstitution[] $institutions
+     * @throws InvalidArgumentException
+     */
+    private function cacheInstitutions(array $institutions): void
+    {
+        foreach ($institutions as $institution) {
+            $this->cacheInstitution($institution, 'id', (string)$institution->id);
+            $this->cacheInstitution($institution, 'deqar_id', $institution->deqarId);
+            $this->cacheInstitution($institution, 'name_primary', $institution->namePrimary);
+        }
+    }
+
+    /**
+     * There is currently no getCountry() method in the WebApiClientInterface.
+     *
+     * @param SimpleReport $report
+     * @param string $identifierType
+     * @param string $identifier
+     * @return SimpleReport|null
+     * @throws InvalidArgumentException
+     */
+    private function cacheReport(SimpleReport $report, string $identifierType, string $identifier): ?SimpleReport
+    {
+        $cacheKey = sprintf(self::CACHE_KEY_REPORT_TEMPLATE, $identifierType, $this->slugger->slug($identifier));
+        return $this->cache->get($cacheKey, function (ItemInterface $cacheItem) use ($report) {
+            $cacheItem->expiresAfter(self::EXPIRATION_TIME);
+            return $report;
+        });
+    }
+
+    /**
+     * @param SimpleReport[] $reports
+     * @throws InvalidArgumentException
+     */
+    private function cacheReports(array $reports): void
+    {
+        foreach ($reports as $report) {
+            $this->cacheReport($report, 'id', (string)$report->id);
+        }
     }
 }
