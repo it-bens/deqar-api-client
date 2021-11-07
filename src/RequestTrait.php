@@ -22,12 +22,78 @@ trait RequestTrait
      * @param string $uri
      * @param string $method
      * @param string $token
+     * @param int $resultsPerRequest
+     * @param int|null $limit
+     * @param int $offset
+     * @return array
+     */
+    public function request(
+        HttpClientInterface $httpClient,
+        string $uri,
+        string $method,
+        string $token,
+        int $resultsPerRequest,
+        ?int $limit = null,
+        int $offset = 0
+    ): array {
+        $remainingResults = $limit;
+
+        $next = true;
+        $results = [];
+        while ($next) {
+            if (null === $remainingResults || $remainingResults > $resultsPerRequest) {
+                $limit = $resultsPerRequest;
+            } else {
+                $limit = $remainingResults;
+            }
+
+            $query = compact('limit', 'offset');
+            $response = $this->doRequest($httpClient, $uri, $method, $token, $query);
+            $decodedResponse = $this->parseJsonResponse($response);
+
+            if (!array_key_exists('results', $decodedResponse)) {
+                // Some endpoints don't provide paging and deliver results directly.
+                // Results are at the top level of the response.
+                return $decodedResponse;
+            }
+            $results = array_merge($results, $decodedResponse['results']);
+            $offset += $limit;
+
+            // A missing or false 'next' key requires a break in every case.
+            if (!array_key_exists('next', $decodedResponse) || false === (bool)$decodedResponse['next']) {
+                $next = false;
+            }
+
+            // A break is also required if no more results are requested by limit.
+            if (null !== $remainingResults) {
+                $remainingResults -= count($decodedResponse['results']);
+                if ($remainingResults <= 0) {
+                    $next = false;
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * @phpstan-ignore-next-line
+     * @param HttpClientInterface $httpClient
+     * @param string $uri
+     * @param string $method
+     * @param string $token
      * @param array $query
      * @param array $json
      * @return ResponseInterface
      */
-    private function doRequest(HttpClientInterface $httpClient, string $uri, string $method, string $token, array $query = [], array $json = []): ResponseInterface
-    {
+    private function doRequest(
+        HttpClientInterface $httpClient,
+        string $uri,
+        string $method,
+        string $token,
+        array $query = [],
+        array $json = []
+    ): ResponseInterface {
         try {
             return $httpClient->request($method, $uri, ['auth_bearer' => $token, 'query' => $query, 'json' => $json]);
         } catch (TransportExceptionInterface $exception) {
@@ -104,31 +170,7 @@ trait RequestTrait
      */
     private function requestAll(HttpClientInterface $httpClient, string $uri, string $method, string $token, int $resultsPerRequest): array
     {
-        $limit = $resultsPerRequest;
-        $offset = 0;
-
-        $next = true;
-        $results = [];
-        while ($next) {
-            $query = compact('limit', 'offset');
-            $response = $this->doRequest($httpClient, $uri, $method, $token, $query);
-            $decodedResponse = $this->parseJsonResponse($response);
-
-            if (!array_key_exists('results', $decodedResponse)) {
-                // Some endpoints don't provide paging and deliver results directly.
-                // Results are at the top level of the response.
-                return $decodedResponse;
-            }
-            $results = array_merge($results, $decodedResponse['results']);
-
-            if (!array_key_exists('next', $decodedResponse) || false === (bool)$decodedResponse['next']) {
-                $next = false;
-            }
-
-            $offset += $resultsPerRequest;
-        }
-
-        return $results;
+        return $this->request($httpClient, $uri, $method, $token, $resultsPerRequest);
     }
 
     /**

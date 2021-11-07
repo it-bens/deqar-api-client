@@ -188,16 +188,18 @@ final class WebApiClient implements WebApiClientInterface
     /**
      * @return SimpleInstitution[]
      */
-    public function getInstitutions(): array
+    public function getInstitutions(?int $limit = null, int $offset = 0): array
     {
         $this->authenticate();
 
-        $results = $this->requestAll(
+        $results = $this->request(
             $this->httpClient,
             self::INSTITUTIONS_ENDPOINT,
             'GET',
             $this->authToken,
-            self::MAX_RESULTS_PER_REQUEST
+            self::MAX_RESULTS_PER_REQUEST,
+            $limit,
+            $offset
         );
 
         return $this->deserializeFromArray($results, SimpleInstitution::class . '[]', $this->serializer);
@@ -206,16 +208,18 @@ final class WebApiClient implements WebApiClientInterface
     /**
      * @return SimpleReport[]
      */
-    public function getReports(): array
+    public function getReports(?int $limit = null, int $offset = 0): array
     {
         $this->authenticate();
 
-        $results = $this->requestAll(
+        $results = $this->request(
             $this->httpClient,
             self::REPORTS_ENDPOINT,
             'GET',
             $this->authToken,
-            self::MAX_RESULTS_PER_REQUEST
+            self::MAX_RESULTS_PER_REQUEST,
+            $limit,
+            $offset
         );
 
         return $this->deserializeFromArray($results, SimpleReport::class . '[]', $this->serializer);

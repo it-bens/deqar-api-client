@@ -58,12 +58,12 @@ interface WebApiClientInterface
     /**
      * @return SimpleInstitution[]
      */
-    public function getInstitutions(): array;
+    public function getInstitutions(?int $limit = null, int $offset = 0): array;
 
     // public function getReport(string $id);
 
     /**
      * @return SimpleReport[]
      */
-    public function getReports(): array;
+    public function getReports(?int $limit = null, int $offset = 0): array;
 }

@@ -46,6 +46,7 @@ jobs:
           php_extensions: xdebug
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml.dist
+          exclude_group: local-only
           args: --coverage-clover ./coverage.xml
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}

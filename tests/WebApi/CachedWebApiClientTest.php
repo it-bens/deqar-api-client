@@ -90,15 +90,43 @@ final class CachedWebApiClientTest extends TestCase
         $this->assertNull($institution);
     }
 
+    /**
+     * This test will be disabled for CI pipelines for performance reasons.
+     * @group local-only
+     */
     public function testGetInstitutions(): void
     {
         $institutions = $this->cachedWebApiClient->getInstitutions();
         $this->assertContainsOnlyInstancesOf(SimpleInstitution::class, $institutions);
     }
 
+    public function testGetInstitutionsWithLimit(): void
+    {
+        $institutions = $this->cachedWebApiClient->getInstitutions(1500);
+        self::assertCount(1500, $institutions);
+        self::assertContainsOnlyInstancesOf(SimpleInstitution::class, $institutions);
+
+        $institutions = $this->cachedWebApiClient->getInstitutions(400);
+        self::assertCount(400, $institutions);
+    }
+
+    /**
+     * This test will be disabled for CI pipelines for performance reasons.
+     * @group local-only
+     */
     public function testGetReports(): void
     {
         $reports = $this->cachedWebApiClient->getReports();
         $this->assertContainsOnlyInstancesOf(SimpleReport::class, $reports);
+    }
+
+    public function testGetReportsWithLimit(): void
+    {
+        $reports = $this->cachedWebApiClient->getReports(3000);
+        self::assertCount(3000, $reports);
+        self::assertContainsOnlyInstancesOf(SimpleReport::class, $reports);
+
+        $reports = $this->cachedWebApiClient->getReports(1500);
+        self::assertCount(1500, $reports);
     }
 }
