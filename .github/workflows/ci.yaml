@@ -54,7 +54,7 @@ jobs:
           DEQAR_API_USERNAME: ${{ secrets.DEQAR_API_USERNAME }}
           DEQAR_API_PASSWORD: ${{ secrets.DEQAR_API_PASSWORD }}
       - name: "PHPStan Static Analysis"
-        run: vendor/bin/phpstan analyse src tests --level 8
+        run: vendor/bin/phpstan analyse src --level 8
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v2
         with:
