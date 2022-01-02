@@ -9,11 +9,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class SimpleAgency
 {
+    public int $countryId;
+
     /**
      * @param int $id
      * @param string $deqarId
      * @param string $namePrimary
      * @param string $acronym
+     * @param array{id: int} $country
      * @param Activity[] $activities
      * @param string $registrationStart
      * @param string $registrationValidTo
@@ -32,6 +35,8 @@ final class SimpleAgency
         public string $namePrimary,
         #[SerializedName('acronym_primary')]
         public string $acronym,
+        #[SerializedName('country')]
+        private array $country,
         #[SerializedName('activities')]
         /** @var Activity[] */ public array $activities,
         #[SerializedName('registration_start')]
@@ -49,5 +54,6 @@ final class SimpleAgency
         #[SerializedName('logo')]
         public ?string $logoLink = null,
     ) {
+        $this->countryId = $this->country['id'];
     }
 }
