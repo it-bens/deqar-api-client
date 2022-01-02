@@ -13,6 +13,7 @@ final class SimpleAgency
      * @param int $id
      * @param string $deqarId
      * @param string $namePrimary
+     * @param string $acronym
      * @param Activity[] $activities
      * @param string $registrationStart
      * @param string $registrationValidTo
@@ -29,6 +30,8 @@ final class SimpleAgency
         public string $deqarId,
         #[SerializedName('name_primary')]
         public string $namePrimary,
+        #[SerializedName('acronym_primary')]
+        public string $acronym,
         #[SerializedName('activities')]
         /** @var Activity[] */ public array $activities,
         #[SerializedName('registration_start')]
