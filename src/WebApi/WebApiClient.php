@@ -115,7 +115,7 @@ final class WebApiClient implements WebApiClientInterface
             if ($identifier === (string)$agency->id) {
                 return $agency;
             }
-            if ($identifier === $agency->deqarId) {
+            if ($identifier === (string)$agency->deqarId) {
                 return $agency;
             }
             if ($identifier === $agency->namePrimary) {

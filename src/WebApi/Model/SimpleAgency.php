@@ -13,7 +13,7 @@ final class SimpleAgency
 
     /**
      * @param int $id
-     * @param string $deqarId
+     * @param int $deqarId
      * @param string $namePrimary
      * @param string $acronym
      * @param array{id: int} $country
@@ -30,7 +30,7 @@ final class SimpleAgency
         #[SerializedName('id')]
         public int $id,
         #[SerializedName('deqar_id')]
-        public string $deqarId,
+        public int $deqarId,
         #[SerializedName('name_primary')]
         public string $namePrimary,
         #[SerializedName('acronym_primary')]

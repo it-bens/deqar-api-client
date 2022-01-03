@@ -257,7 +257,7 @@ final class CachedWebApiClient implements WebApiClientInterface
     {
         foreach ($agencies as $agency) {
             $this->cacheAgency($agency, 'id', (string)$agency->id);
-            $this->cacheAgency($agency, 'deqar_id', $agency->deqarId);
+            $this->cacheAgency($agency, 'deqar_id', (string)$agency->deqarId);
             $this->cacheAgency($agency, 'name_primary', $agency->namePrimary);
         }
     }
