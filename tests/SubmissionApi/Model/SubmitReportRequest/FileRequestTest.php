@@ -25,7 +25,7 @@ final class FileRequestTest extends TestCase
 
     public static function createFileRequest(): FileRequest
     {
-        return new FileRequest('https://www.orimi.com/pdf-test.pdf', ['eng'], 'PDF TEST');
+        return new FileRequest('https://resources.github.com/downloads/Quick-Guide-to-Open-Source-Enterprises.pdf', ['eng'], 'PDF TEST');
     }
 
     /**
