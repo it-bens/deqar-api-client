@@ -17,7 +17,7 @@ final class ExistingInstitutionValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ExistingInstitution) {
             throw new UnexpectedTypeException($constraint, ExistingInstitution::class);

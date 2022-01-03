@@ -277,6 +277,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('activity', $violations[0]->getPropertyPath());
         self::assertInstanceOf(ExistingActivity::class, $violations[0]->getConstraint());
     }
@@ -289,6 +290,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('agency', $violations[0]->getPropertyPath());
         self::assertInstanceOf(ExistingAgency::class, $violations[0]->getConstraint());
     }
@@ -301,6 +303,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('comment', $violations[0]->getPropertyPath());
         self::assertInstanceOf(NotBlank::class, $violations[0]->getConstraint());
     }
@@ -313,6 +316,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('contributingAgencies', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -325,6 +329,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('contributingAgencies[0]', $violations[0]->getPropertyPath());
         self::assertInstanceOf(NotBlank::class, $violations[0]->getConstraint());
     }
@@ -337,6 +342,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('contributingAgencies[0]', $violations[0]->getPropertyPath());
         self::assertInstanceOf(ExistingAgency::class, $violations[0]->getConstraint());
     }
@@ -349,6 +355,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('decision', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Choice::class, $violations[0]->getConstraint());
     }
@@ -361,6 +368,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('files', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -388,6 +396,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('id', $violations[0]->getPropertyPath());
         self::assertInstanceOf(NotBlank::class, $violations[0]->getConstraint());
     }
@@ -415,6 +424,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('links', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -442,6 +452,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('localIdentifier', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -469,6 +480,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('status', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Choice::class, $violations[0]->getConstraint());
     }
@@ -481,6 +493,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('summary', $violations[0]->getPropertyPath());
         self::assertInstanceOf(NotBlank::class, $violations[0]->getConstraint());
     }
@@ -493,6 +506,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('validFrom', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Date::class, $violations[0]->getConstraint());
     }
@@ -505,6 +519,7 @@ final class SubmitReportRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('validTo', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Date::class, $violations[0]->getConstraint());
     }

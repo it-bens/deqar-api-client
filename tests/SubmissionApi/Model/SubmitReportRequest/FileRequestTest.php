@@ -25,7 +25,7 @@ final class FileRequestTest extends TestCase
 
     public static function createFileRequest(): FileRequest
     {
-        return new FileRequest('https://www.orimi.com/pdf-test.pdf', ['eng'], 'PDF TEST');
+        return new FileRequest('https://resources.github.com/downloads/Quick-Guide-to-Open-Source-Enterprises.pdf', ['eng'], 'PDF TEST');
     }
 
     /**
@@ -109,6 +109,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('displayName', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -121,6 +122,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('languages', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -148,6 +150,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('originalLocation', $violations[0]->getPropertyPath());
         self::assertInstanceOf(WebFilePdf::class, $violations[0]->getConstraint());
     }
@@ -160,6 +163,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('originalLocation', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Url::class, $violations[0]->getConstraint());
     }

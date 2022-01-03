@@ -160,6 +160,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('alternativeNames', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -187,6 +188,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('countries', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -214,6 +216,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('identifiers', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -241,6 +244,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('namePrimary', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -253,6 +257,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('nqfLevel', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -265,6 +270,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('qfEheaLevel', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Choice::class, $violations[0]->getConstraint());
     }
@@ -277,6 +283,7 @@ final class ProgrammeRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('qualificationPrimary', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }

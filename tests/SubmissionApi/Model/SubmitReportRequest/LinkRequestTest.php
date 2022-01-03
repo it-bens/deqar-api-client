@@ -7,6 +7,7 @@ namespace ITB\DeqarApiClient\Tests\SubmissionApi\Model\SubmitReportRequest;
 use ITB\DeqarApiClient\SubmissionApi\Model\SubmitReportRequest\LinkRequest;
 use ITB\DeqarApiClient\Tests\SubmissionApi\AbstractSubmissionApiTest;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\ConstraintViolation;
 
 final class LinkRequestTest extends AbstractSubmissionApiTest
 {
@@ -56,6 +57,7 @@ final class LinkRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('displayName', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -68,6 +70,7 @@ final class LinkRequestTest extends AbstractSubmissionApiTest
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('link', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
