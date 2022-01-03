@@ -18,7 +18,7 @@ final class ValidActivityInstitutionProgrammeCombinationValidator extends Constr
     {
     }
 
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ValidActivityInstitutionProgrammeCombination) {
             throw new UnexpectedTypeException($constraint, ValidActivityInstitutionProgrammeCombination::class);

@@ -16,7 +16,7 @@ final class ExistingAgencyValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ExistingAgency) {
             throw new UnexpectedTypeException($constraint, ExistingAgency::class);

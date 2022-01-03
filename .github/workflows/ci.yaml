@@ -14,7 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-20.04 ]
-        php-version: [ 8.0 ]
+        php-version: [ "8.0", "8.1" ]
+        symfony: [ "5.4", "6.0" ]
         experimental: [ false ]
 
     environment: test
@@ -26,7 +27,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: xdebug
+          extensions: intl, xdebug
           coverage: xdebug
           tools: phive, composer:v2
       - name: "Cache Composer dependencies"
@@ -34,16 +35,23 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - name: "Copy required composer.lock"
+        uses: canastro/copy-file-action@master
+        with:
+          source: "./tests/config/composer.lock_symfony-${{ matrix.symfony }}"
+          target: "./composer.lock"
       - name: "Install Composer dependencies"
         uses: php-actions/composer@v6
         with:
-          php_version: 8.0
+          php_version: ${{ matrix.php-version }}
           dev: yes
           args: --no-interaction --no-progress --no-suggest --optimize-autoloader
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
       - name: "PHPUnit Tests"
         uses: php-actions/phpunit@v2
         with:
-          php_extensions: xdebug
+          php_extensions: intl xdebug
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml.dist
           exclude_group: local-only
@@ -54,7 +62,7 @@ jobs:
           DEQAR_API_USERNAME: ${{ secrets.DEQAR_API_USERNAME }}
           DEQAR_API_PASSWORD: ${{ secrets.DEQAR_API_PASSWORD }}
       - name: "PHPStan Static Analysis"
-        run: vendor/bin/phpstan analyse src --level 8
+        run: vendor/bin/phpstan analyse src tests --level 8
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v2
         with:

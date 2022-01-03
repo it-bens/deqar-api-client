@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 final class InstitutionRequestHasOneIdValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof InstitutionRequestHasOneId) {
             throw new UnexpectedTypeException($constraint, InstitutionRequestHasOneId::class);
