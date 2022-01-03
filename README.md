@@ -21,7 +21,7 @@ The package can be installed via Composer:
 ```bash
 composer require it-bens/deqar-api-client
 ```
-It requires at least PHP 8.
+It requires at least PHP 8. It was tests against PHP 8.1.
 
 ## Which API Client provides this package?
 This package contains clients for the WebAPI and the SubmissionAPI.
@@ -177,6 +177,7 @@ docker-compose run --rm -T phpunit php -d memory_limit=2G vendor/bin/phpstan ana
 ```
 
 The PHPUnit tests and a static code analysis via PHPStan are also executed via GitHub actions on any push or PR.
+The GitHub Actions CI runs with all supported PHP versions and all supported Symfony versions.
 
 ## Contributing
 I am really happy that the software developer community loves Open Source, like I do! ♥
