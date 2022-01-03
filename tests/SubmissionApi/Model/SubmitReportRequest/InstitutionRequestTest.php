@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class InstitutionRequestTest extends TestCase
@@ -113,6 +114,7 @@ final class InstitutionRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('deqarId', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -125,6 +127,7 @@ final class InstitutionRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('deqarId', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Regex::class, $violations[0]->getConstraint());
     }
@@ -137,6 +140,7 @@ final class InstitutionRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('eterId', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -149,6 +153,7 @@ final class InstitutionRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertInstanceOf(InstitutionRequestHasOneId::class, $violations[0]->getConstraint());
     }
 
@@ -160,6 +165,7 @@ final class InstitutionRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertInstanceOf(ExistingInstitution::class, $violations[0]->getConstraint());
     }
 

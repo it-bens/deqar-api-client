@@ -109,6 +109,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('displayName', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Length::class, $violations[0]->getConstraint());
     }
@@ -121,6 +122,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('languages', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Count::class, $violations[0]->getConstraint());
     }
@@ -148,6 +150,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('originalLocation', $violations[0]->getPropertyPath());
         self::assertInstanceOf(WebFilePdf::class, $violations[0]->getConstraint());
     }
@@ -160,6 +163,7 @@ final class FileRequestTest extends TestCase
     {
         $violations = $this->validator->validate($request);
         self::assertCount(1, $violations);
+        /** @var non-empty-list<ConstraintViolation> $violations */
         self::assertEquals('originalLocation', $violations[0]->getPropertyPath());
         self::assertInstanceOf(Url::class, $violations[0]->getConstraint());
     }
